@@ -1,1 +1,65 @@
-# ado_api_package
+# Azure DevOps API Package
+
+A Python library for interacting with Azure DevOps REST APIs, with a focus on simplicity and human-centric error handling.
+
+## Installation
+Ensure you have `requests` installed:
+```bash
+pip install requests
+```
+
+## Setup Environment
+This library relies on environment variables for configuration. **Do not hardcode your credentials.**
+
+```bash
+# Linux/macOS
+export AZDO_ORG_URL="https://dev.azure.com/{your-organization}"
+export AZDO_PAT="your-personal-access-token"
+
+# Windows (PowerShell)
+$env:AZDO_ORG_URL="https://dev.azure.com/{your-organization}"
+$env:AZDO_PAT="your-personal-access-token"
+```
+
+## Features
+
+### Check Project Existence
+Verify if a project exists by name or UUID.
+
+```python
+from core.project import check_project_exists
+
+try:
+    if check_project_exists("MyProject"):
+        print("Project found!")
+    else:
+        print("Project not found.")
+except RuntimeError as e:
+    # Error details and suggested solutions are printed to the console automatically
+    pass
+```
+
+### Project Member Management
+Locate security groups and manage project membership using email addresses.
+
+```python
+from core.project import Project
+
+# Initialize project context
+p = Project("MyProject")
+
+# 1. Locate key security groups (Project Administrators, Contributors)
+groups = p.get_project_groups()
+print(f"Found groups: {groups.keys()}")
+
+# 2. Add a member to the 'Contributors' group using their email
+p.add_member_to_group(groups["Contributors"], "user@example.com")
+
+# 3. Remove a member from a group
+p.remove_member_from_group(groups["Contributors"], "user@example.com")
+```
+
+## Design Principles
+- **Library-First**: Modular and testable components.
+- **Environment-Driven**: No hardcoded secrets.
+- **Actionable Errors**: Clear feedback and solutions for API failures.
