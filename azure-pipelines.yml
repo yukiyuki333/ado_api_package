@@ -1,0 +1,49 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  python.version: '3.x'
+  sonarCloudServiceConnection: 'SonarCloud'
+  sonarCloudOrganization: 'john19960810'
+  sonarProjectKey: 'john19960810_test'
+  sonarProjectName: 'test'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+# 如果專案有 requirements.txt 可以加上 pip install -r requirements.txt
+# 純靜態分析通常不強制需要安裝相依套件，但升級 pip 確保環境乾淨
+- script: |
+    python -m pip install --upgrade pip
+  displayName: 'Upgrade pip'
+
+- task: SonarCloudPrepare@3
+  displayName: 'Prepare SonarCloud Analysis'
+  inputs:
+    SonarCloud: '$(sonarCloudServiceConnection)'
+    organization: '$(sonarCloudOrganization)'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: '$(sonarProjectKey)'
+    cliProjectName: '$(sonarProjectName)'
+    extraProperties: |
+      # 指定要掃描的原始碼資料夾 (根據你的需求改為 asgrad)
+      sonar.sources=asgrad
+      # 確保 SonarCloud 知道這是 Python 專案
+      sonar.language=py
+
+# 執行靜態程式碼分析
+- task: SonarCloudAnalyze@3
+  displayName: 'SonarCloud Analyze'
+
+# 將分析結果發布回 Azure DevOps 與 SonarCloud 平台
+- task: SonarCloudPublish@3
+  displayName: 'SonarCloud Publish'
+  inputs:
+    pollingTimeoutSec: '300'
