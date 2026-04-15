@@ -34,7 +34,7 @@ steps:
     cliProjectName: '$(sonarProjectName)'
     extraProperties: |
       # 指定要掃描的原始碼資料夾 (根據你的需求改為 asgrad)
-      sonar.sources=asgrad
+      sonar.sources=ado_api
       # 確保 SonarCloud 知道這是 Python 專案
       sonar.language=py
 
