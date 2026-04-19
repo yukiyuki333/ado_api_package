@@ -6,12 +6,12 @@ setup(
     author="yukiyuki333",               # 你的名字
     author_email="713883441ohya@gmail.com",
     description="A Python API wrapper for Azure DevOps",
-    # long_description=open("README.md", encoding="utf-8").read(), # 讀取 README 作為詳細說明
-    # long_description_content_type="text/markdown",
+    long_description=open("README.md", encoding="utf-8").read(), # 讀取 README 作為詳細說明
+    long_description_content_type="text/markdown",
     
     # 這裡非常重要！告訴 setuptools 你的原始碼在 src/ 底下
-    package_dir={"": "ado_api"},
-    packages=find_packages(where="ado_api"), 
+    # package_dir={"": "ado_api"},
+    packages=find_packages(), 
     
     # 如果你的套件有依賴其他的第三方套件 (例如 requests)，要在這裡列出
     install_requires=[
