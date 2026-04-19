@@ -9,9 +9,8 @@ setup(
     long_description=open("README.md", encoding="utf-8").read(), # 讀取 README 作為詳細說明
     long_description_content_type="text/markdown",
     
-    # 這裡非常重要！告訴 setuptools 你的原始碼在 src/ 底下
     # package_dir={"": "ado_api"},
-    packages=find_packages(), 
+    packages=find_packages(where="ado_api"),
     
     # 如果你的套件有依賴其他的第三方套件 (例如 requests)，要在這裡列出
     install_requires=[
