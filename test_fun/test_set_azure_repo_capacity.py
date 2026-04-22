@@ -20,6 +20,13 @@ class TestSetAzureRepoCapacity(unittest.TestCase):
 
         cls.has_real_credentials = bool(cls.org_name and cls.pat)
 
+        print(f"\n🔥🔥🔥 [DEBUG] 抓到的 org_name 變數值為: '{cls.org_name}'")
+        print(f"🔥🔥🔥 [DEBUG] pat 是否有抓到東西: {bool(cls.pat)}")
+
+        # 這裡也要防呆一下
+        if not cls.org_name or not cls.pat:
+            print("⚠️ 警告：環境變數沒有成功載入！")
+
     # ==========================================
     # 1. 真實整合測試 (不使用 Mock)
     # ==========================================
