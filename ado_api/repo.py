@@ -208,7 +208,7 @@ def set_azure_repo_capacity(organization: str, project: str, repo: str, pat: str
         policy_url = f"https://dev.azure.com/{organization}/{project}/_apis/policy/configurations?api-version=7.1"
         
         policy_body = {
-            "maximumGitBlobSizeInBytes": 5242880,
+            "MaximumGitBlobSizeInBytes": 5242880,
             "isEnabled": True,
             "isBlocking": True,
             "type": {

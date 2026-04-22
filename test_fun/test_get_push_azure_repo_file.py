@@ -45,7 +45,7 @@ class TestSyncAzureRepoFile(unittest.TestCase):
             repo=self.source_repo,
             file_path=source_file_path,
             pat=self.pat,
-            branch="feature/test-auto-f80157"
+            branch="main"
         )
 
         print(f"[真實測試] 階段 3: 將取得的內容推送到 Target Repo ({self.target_repo})...")
@@ -56,7 +56,7 @@ class TestSyncAzureRepoFile(unittest.TestCase):
             repo=self.target_repo,
             file_path=target_file_path,
             pat=self.pat,
-            branch="main",
+            branch="feature/test-auto-f80157",
             commit_message="Test(Auto): Sync file from source repo"
         )
         self.assertTrue(sync_result, "推送到 Target Repo 失敗")
