@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from ado_api_package.ado_api.pipeline import release_reserve_setter
+from ado_api.pipeline import release_reserve_setter
 
 class TestReleaseReserveSetter(unittest.TestCase):
 

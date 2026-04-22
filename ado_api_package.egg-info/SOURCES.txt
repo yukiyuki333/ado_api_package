@@ -1,0 +1,13 @@
+README.md
+setup.py
+ado_api/__init__.py
+ado_api/branch.py
+ado_api/member.py
+ado_api/pipeline.py
+ado_api/project.py
+ado_api/repo.py
+ado_api_package.egg-info/PKG-INFO
+ado_api_package.egg-info/SOURCES.txt
+ado_api_package.egg-info/dependency_links.txt
+ado_api_package.egg-info/requires.txt
+ado_api_package.egg-info/top_level.txt

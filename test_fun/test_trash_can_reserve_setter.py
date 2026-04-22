@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from ado_api_package.ado_api.pipeline import trash_can_reserve_setter
+from ado_api.pipeline import trash_can_reserve_setter
 
 class TestTrashCanReserveSetter(unittest.TestCase):
 

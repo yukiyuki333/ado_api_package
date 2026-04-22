@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import os
-from ado_api_package.ado_api.member import get_group
+from ado_api.member import get_group
 
 class TestGetGroup(unittest.TestCase):
     @classmethod

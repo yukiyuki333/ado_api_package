@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from ado_api_package.ado_api.member import update_group
+from ado_api.member import update_group
 
 class TestUpdateGroup(unittest.TestCase):
 

@@ -1,7 +1,7 @@
 import os
 import unittest
 from unittest.mock import patch, MagicMock
-from ado_api_package.ado_api.project import check_project_exists
+from ado_api.project import check_project_exists
 
 class TestCheckProjectExists(unittest.TestCase):
     @patch('ado_api.project.requests.get')
