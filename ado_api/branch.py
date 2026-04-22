@@ -137,13 +137,13 @@ def set_git_branch_policy(organization: str, project: str, repo: str, branch: st
                         break
 
         # 4. Define target policy settings
-        # US1: Work Item Linking (714d0a27-3439-4fde-8510-331ca0d3121c)
+        # US1: Work Item Linking (40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e)
         # US1: Comment Resolution (c6a1889d-b943-4856-b76f-9e46bb6b0df2)
         # US2: Merge Strategy (fa4e907d-c16b-4a4c-9dfa-4916e5d171ab)
         
         targets = [
             {
-                "type_id": "714d0a27-3439-4fde-8510-331ca0d3121c",
+                "type_id": "40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e",
                 "settings": {
                     "scope": [{"repositoryId": repo_id, "refName": branch_ref, "matchKind": "exact"}]
                 }
