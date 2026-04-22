@@ -1,7 +1,7 @@
 import unittest
 import os
 import uuid
-from ..ado_api.branch import create_branch, set_git_branch_policy
+from ado_api_package.ado_api.branch import create_branch, set_git_branch_policy
 
 org_name = os.getenv("org_name")
 pat = os.getenv("pat")

@@ -3,7 +3,7 @@ import uuid
 import unittest
 from unittest.mock import patch, MagicMock
 # 請根據你實際的資料夾結構調整 import
-from ..ado_api.repo import get_azure_repo_file, push_azure_repo_file
+from ado_api_package.ado_api.repo import get_azure_repo_file, push_azure_repo_file
 
 
 class TestSyncAzureRepoFile(unittest.TestCase):

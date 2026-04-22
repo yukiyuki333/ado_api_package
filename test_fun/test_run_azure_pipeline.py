@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from ..ado_api.pipeline import run_azure_pipeline
+from ado_api_package.ado_api.pipeline import run_azure_pipeline
 
 class TestRunAzurePipeline(unittest.TestCase):
 

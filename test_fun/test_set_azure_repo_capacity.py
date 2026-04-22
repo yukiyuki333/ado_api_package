@@ -1,7 +1,7 @@
 import os
 import unittest
 from unittest.mock import patch, MagicMock
-from ..ado_api.repo import set_azure_repo_capacity
+from ado_api_package.ado_api.repo import set_azure_repo_capacity
 
 
 class TestSetAzureRepoCapacity(unittest.TestCase):
