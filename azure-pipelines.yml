@@ -48,7 +48,7 @@ steps:
     python -m pytest test_fun/ --junitxml=test-results.xml --cov=ado_api --cov-config=.coveragerc --cov-report=xml:coverage.xml
   displayName: 'Run functional tests and coverage'
     # 手動映射機密變數
-    env:
+  env:
         # 格式 -> 自訂的環境變數名稱 : $(Azure裡的變數名稱)
         org_name: $(ORG_NAME)        
         pat: $(PAT)        
