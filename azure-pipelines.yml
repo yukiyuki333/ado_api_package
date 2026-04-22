@@ -1,5 +1,5 @@
 trigger:
-- main
+  - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -9,76 +9,73 @@ variables:
   sonarCloudServiceConnection: 'SonarCloud'
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Use Python $(python.version)'
 
-# 【修正 1】改用 python -m pip，並補上 pytest-cov 與 jq
-- script: |
-    python -m pip install --upgrade pip
-    python -m pip install pytest pytest-cov jq
-  displayName: 'Install dependencies'
+  # 【修正 1】改用 python -m pip，並補上 pytest-cov 與 jq
+  - script: |
+      python -m pip install --upgrade pip
+      python -m pip install pytest pytest-cov jq
+    displayName: 'Install dependencies'
 
-- task: SonarCloudPrepare@3
-  displayName: 'Prepare SonarCloud Analysis'
-  inputs:
-    SonarCloud: '$(sonarCloudServiceConnection)'
-    organization: '$(sonarCloudOrganization)'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: '$(sonarProjectKey)'
-    cliProjectName: '$(sonarProjectName)'
-    extraProperties: |
-      sonar.python.coverage.reportPaths=$(System.DefaultWorkingDirectory)/coverage.xml
-      sonar.python.xunit.reportPath=$(System.DefaultWorkingDirectory)/test-results.xml
-      sonar.sources = ado_api
-      sonar.tests = test_fun 
-      sonar.test.inclusions=test_fun/**/test_*.py
+  - task: SonarCloudPrepare@3
+    displayName: 'Prepare SonarCloud Analysis'
+    inputs:
+      SonarCloud: '$(sonarCloudServiceConnection)'
+      organization: '$(sonarCloudOrganization)'
+      scannerMode: 'CLI'
+      configMode: 'manual'
+      cliProjectKey: '$(sonarProjectKey)'
+      cliProjectName: '$(sonarProjectName)'
+      # 【修正 2】移除等號前後的非法空白
+      extraProperties: |
+        sonar.python.coverage.reportPaths=$(System.DefaultWorkingDirectory)/coverage.xml
+        sonar.python.xunit.reportPath=$(System.DefaultWorkingDirectory)/test-results.xml
+        sonar.sources=ado_api
+        sonar.tests=test_fun
+        sonar.test.inclusions=test_fun/**/test_*.py
 
-- script: |
-    # 1. 動態建立 .coveragerc 檔案
-    cat <<EOF > .coveragerc
-    [run]
-    omit =
-        test_fun /test_*.py
-    EOF
-    
-    # 2. 執行 pytest 並套用剛剛建立的設定檔
-    python -m pytest test_fun/ --junitxml=test-results.xml --cov=ado_api --cov-config=.coveragerc --cov-report=xml:coverage.xml
-  displayName: 'Run functional tests and coverage'
-    # 手動映射機密變數
-  env:
-        # 格式 -> 自訂的環境變數名稱 : $(Azure裡的變數名稱)
-        org_name: $(ORG_NAME)        
-        pat: $(PAT)        
+  - script: |
+      # 【修正 3】改用 echo 建立設定檔，避開 YAML 縮排導致 EOF 找不到的錯誤
+      echo "[run]" > .coveragerc
+      echo "omit =" >> .coveragerc
+      echo "    test_fun/*" >> .coveragerc
+      
+      # 執行 pytest 並套用剛剛建立的設定檔
+      python -m pytest test_fun/ --junitxml=test-results.xml --cov=ado_api --cov-config=.coveragerc --cov-report=xml:coverage.xml
+    displayName: 'Run functional tests and coverage'
+    # 【修正 4】手動映射機密變數 (與 script 及 displayName 完全垂直對齊)
+    env:
+      org_name: $(ORG_NAME)
+      pat: $(PAT)
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results to Azure DevOps'
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/test-results.xml'
-    failTaskOnFailedTests: true
-    testRunTitle: 'Python Tests'
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results to Azure DevOps'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/test-results.xml'
+      failTaskOnFailedTests: true
+      testRunTitle: 'Python Tests'
 
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish Code Coverage'
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage.xml'
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish Code Coverage'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage.xml'
 
+  - task: PublishTestResults@2
+    displayName: 'Publish Performance Test Results'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/perf-results.xml'
+      testRunTitle: 'Performance Test Results'
 
-- task: PublishTestResults@2
-  displayName: 'Publish Performance Test Results'
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/perf-results.xml'
-    testRunTitle: 'Performance Test Results'
+  - task: SonarCloudAnalyze@3
+    displayName: 'SonarCloudAnalyze'
 
-- task: SonarCloudAnalyze@3
-  displayName: 'SonarCloudAnalyze'
-
-- task: SonarCloudPublish@3
-  displayName: 'SonarCloudPublish'
-  inputs:
-    pollingTimeoutSec: '300'
+  - task: SonarCloudPublish@3
+    displayName: 'SonarCloudPublish'
+    inputs:
+      pollingTimeoutSec: '300'
