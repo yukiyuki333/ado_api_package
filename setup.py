@@ -10,7 +10,8 @@ setup(
     long_description_content_type="text/markdown",
     
     package_dir={"": "ado_api"},
-    packages=find_packages(where="ado_api"),
+    # packages=find_packages(where="ado_api"),
+    packages=["ado_api"],
     
     # 如果你的套件有依賴其他的第三方套件 (例如 requests)，要在這裡列出
     install_requires=[
