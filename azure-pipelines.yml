@@ -18,7 +18,7 @@ steps:
   - script: |
       python -m pip install --upgrade pip
       python -m pip install pytest pytest-cov jq
-      python -m pip install git+https://github.com/yukiyuki333/ado_api_package.git
+      python -m pip install -e .
       echo "================ 已安裝的套件清單 ================"
       python -m pip list
       echo "================================================="
