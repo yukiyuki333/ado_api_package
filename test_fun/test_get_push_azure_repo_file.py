@@ -45,7 +45,7 @@ class TestSyncAzureRepoFile(unittest.TestCase):
             repo=self.source_repo,
             file_path=source_file_path,
             pat=self.pat,
-            branch="main"
+            branch="for_test"
         )
 
         print(f"[真實測試] 階段 3: 將取得的內容推送到 Target Repo ({self.target_repo})...")

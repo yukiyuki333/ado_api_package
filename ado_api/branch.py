@@ -31,7 +31,7 @@ def create_branch(organization: str, project: str, repo: str, pat: str, new_bran
         # 2. Get Source Branch Commit ID
         # Endpoint: GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repo}/refs?filter=heads/{source_branch_name}&api-version=7.1
         filter_name = full_source_branch.replace("refs/", "")
-        ref_url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repo}/refs"
+        ref_url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repo}/refs?api-version=7.1"
         ref_params = {
             "filter": filter_name,
             "api-version": "7.1"
@@ -138,7 +138,7 @@ def set_git_branch_policy(organization: str, project: str, repo: str, branch: st
 
         # 4. Define target policy settings
         # US1: Work Item Linking (714d0a27-3439-4fde-8510-331ca0d3121c)
-        # US1: Comment Resolution (c6a188d0-6444-4da6-91fa-69c3b27d7c59)
+        # US1: Comment Resolution (c6a1889d-b943-4856-b76f-9e46bb6b0df2)
         # US2: Merge Strategy (fa4e907d-c16b-4a4c-9dfa-4916e5d171ab)
         
         targets = [
@@ -149,7 +149,7 @@ def set_git_branch_policy(organization: str, project: str, repo: str, branch: st
                 }
             },
             {
-                "type_id": "c6a188d0-6444-4da6-91fa-69c3b27d7c59",
+                "type_id": "c6a1889d-b943-4856-b76f-9e46bb6b0df2",
                 "settings": {
                     "scope": [{"repositoryId": repo_id, "refName": branch_ref, "matchKind": "exact"}]
                 }
@@ -190,7 +190,6 @@ def set_git_branch_policy(organization: str, project: str, repo: str, branch: st
                 # Create (POST)
                 create_url = f"https://dev.azure.com/{organization}/{project}/_apis/policy/configurations?api-version=7.1"
                 resp = requests.post(create_url, auth=auth, json=payload)
-            
             if resp.status_code in [200, 201]:
                 success_count += 1
             else:

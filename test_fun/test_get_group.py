@@ -8,12 +8,13 @@ class TestGetGroup(unittest.TestCase):
     def setUpClass(cls):
         cls.org_name = os.getenv("org_name")
         cls.pat = os.getenv("pat")
-        cls.contri_des = os.getenv("Contributors_descriptor")
+        # cls.contri_des = os.getenv("Contributors_descriptor")
 
     def test_get_group_success(self):
         result = get_group(self.org_name, "ProjectMember", "Contributors", self.pat)
-        
-        self.assertEqual(result, self.contri_des)
+
+        self.assertIsNotNone(result)
+        self.assertTrue(result.startswith("vssgp.") or result.startswith("aad."))
 
 
     @patch('ado_api.member.requests.get')

@@ -204,14 +204,14 @@ def set_azure_repo_capacity(organization: str, project: str, repo: str, pat: str
             return False
 
         # 2. Create Policy Configuration
-        # Policy Type ID for "Maximum repository size": 227b3820-c3c0-4e29-96f1-fddc34c07969
+        # Policy Type ID for "Maximum repository size": 2e26e725-8201-4edd-8bf5-978563c34a80
         policy_url = f"https://dev.azure.com/{organization}/{project}/_apis/policy/configurations?api-version=7.1"
         
         policy_body = {
             "isEnabled": True,
             "isBlocking": True,
             "type": {
-                "id": "227b3820-c3c0-4e29-96f1-fddc34c07969"
+                "id": "2e26e725-8201-4edd-8bf5-978563c34a80"
             },
             "settings": {
                 "maximumRepositorySize": 5242880,  # 5MB in bytes (5 * 1024 * 1024)
