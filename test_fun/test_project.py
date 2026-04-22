@@ -8,7 +8,7 @@ class TestCheckProjectExists(unittest.TestCase):
     def test_project_exists_success(self):
         org_name = os.getenv("org_name")
         pat = os.getenv("pat")
-
+        self.assertEqual(org_name, "john19960810", "get env variable error")
         result = check_project_exists(org_name, "john19960810", pat)
         self.assertTrue(result)
 
