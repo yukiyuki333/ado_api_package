@@ -9,7 +9,7 @@ setup(
     long_description=open("README.md", encoding="utf-8").read(), # 讀取 README 作為詳細說明
     long_description_content_type="text/markdown",
     
-    package_dir={"": "ado_api"},
+    # package_dir={"": "ado_api"},
     # packages=find_packages(where="ado_api"),
     packages=["ado_api"],
     
