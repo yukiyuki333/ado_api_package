@@ -9,7 +9,7 @@ class TestCheckProjectExists(unittest.TestCase):
         org_name = os.getenv("org_name")
         pat = os.getenv("pat")
 
-        result = check_project_exists(org_name, "john19960801", pat)
+        result = check_project_exists(org_name, "john19960810", pat)
         self.assertTrue(result)
 
     @patch('ado_api.project.requests.get')

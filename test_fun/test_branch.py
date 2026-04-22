@@ -18,7 +18,7 @@ class TestAzureBranchAPI(unittest.TestCase):
         cls.pat = os.getenv("pat")
 
         # 建議你也在 Pipeline 或本機環境變數設定這兩個值
-        cls.project_name = "john19960801"
+        cls.project_name = "john19960810"
         cls.repo_name = "test"
 
         # 防呆機制：如果沒抓到變數，直接跳過這個 Class 裡面的所有測試

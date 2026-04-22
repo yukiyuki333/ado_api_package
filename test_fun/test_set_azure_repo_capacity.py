@@ -15,7 +15,7 @@ class TestSetAzureRepoCapacity(unittest.TestCase):
         """
         cls.org_name = os.getenv("org_name")
         cls.pat = os.getenv("pat")
-        cls.project_name = "john19960801"
+        cls.project_name = "john19960810"
         cls.repo_name = "test"
 
         cls.has_real_credentials = bool(cls.org_name and cls.pat)

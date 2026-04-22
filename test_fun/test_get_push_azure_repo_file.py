@@ -15,7 +15,7 @@ class TestSyncAzureRepoFile(unittest.TestCase):
         """
         cls.org_name = os.getenv("org_name")
         cls.pat = os.getenv("pat")
-        cls.project_name = "john19960801"
+        cls.project_name = "john19960810"
 
         # 為了模擬 Repo A 到 Repo B，我們定義兩個 Repo 變數
         cls.source_repo = "test"
