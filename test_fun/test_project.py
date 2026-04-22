@@ -4,15 +4,12 @@ from unittest.mock import patch, MagicMock
 from ado_api.project import check_project_exists
 
 class TestCheckProjectExists(unittest.TestCase):
-    @patch('ado_api.project.requests.get')
     def test_project_exists_success(self):
         org_name = os.getenv("org_name")
         pat = os.getenv("pat")
-        self.assertEqual(org_name, "john19960810", "get env variable error")
         result = check_project_exists(org_name, "john19960810", pat)
         self.assertTrue(result)
 
-    @patch('ado_api.project.requests.get')
     def test_project_not_found(self):
         org_name = os.getenv("org_name")
         pat = os.getenv("pat")

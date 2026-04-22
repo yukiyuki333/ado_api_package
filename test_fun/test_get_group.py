@@ -10,7 +10,6 @@ class TestGetGroup(unittest.TestCase):
         cls.pat = os.getenv("pat")
         cls.contri_des = os.getenv("Contributors_descriptor")
 
-    @patch('ado_api.member.requests.get')
     def test_get_group_success(self):
         result = get_group(self.org_name, "ProjectMember", "Contributors", self.pat)
         
