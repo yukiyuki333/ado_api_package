@@ -7,9 +7,9 @@ pool:
 variables:
   python.version: '3.x'
   sonarCloudServiceConnection: 'SonarCloud'
-  sonarCloudOrganization: 'john19960810'
-  sonarProjectKey: 'john19960810_test'
-  sonarProjectName: 'test'
+  sonarCloudOrganization: $(sonarCloudOrganization)
+  sonarProjectKey: $(sonarProjectKey)
+  sonarProjectName: $(sonarProjectName)
 
 steps:
 - task: UsePythonVersion@0

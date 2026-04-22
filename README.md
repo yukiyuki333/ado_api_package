@@ -1,65 +1,44 @@
-# Azure DevOps API Package
+# Azure API Package
 
-A Python library for interacting with Azure DevOps REST APIs, with a focus on simplicity and human-centric error handling.
+A Python library for interacting with Azure APIs, designed for modularity, reliable error handling, and ease of use.
 
 ## Installation
-Ensure you have `requests` installed:
 ```bash
-pip install requests
+pip install .
 ```
 
-## Setup Environment
-This library relies on environment variables for configuration. **Do not hardcode your credentials.**
-
-```bash
-# Linux/macOS
-export AZDO_ORG_URL="https://dev.azure.com/{your-organization}"
-export AZDO_PAT="your-personal-access-token"
-
-# Windows (PowerShell)
-$env:AZDO_ORG_URL="https://dev.azure.com/{your-organization}"
-$env:AZDO_PAT="your-personal-access-token"
+## Features
+### Unified Imports
+All functions can be imported directly from the package level:
+```python
+from ado_api import check_project_exists, get_azure_repo_file
 ```
 
 ## Features
 
 ### Check Project Existence
-Verify if a project exists by name or UUID.
-
+Verify if a project exists in an organization.
 ```python
-from core.project import check_project_exists
-
-try:
-    if check_project_exists("MyProject"):
-        print("Project found!")
-    else:
-        print("Project not found.")
-except RuntimeError as e:
-    # Error details and suggested solutions are printed to the console automatically
-    pass
+if check_project_exists("Org", "MyProject", "pat"):
+    print("Project exists!")
 ```
 
-### Project Member Management
-Locate security groups and manage project membership using email addresses.
-
+### Get Repository File Content
+Retrieve the raw content of a file from a Git repository.
 ```python
-from core.project import Project
-
-# Initialize project context
-p = Project("MyProject")
-
-# 1. Locate key security groups (Project Administrators, Contributors)
-groups = p.get_project_groups()
-print(f"Found groups: {groups.keys()}")
-
-# 2. Add a member to the 'Contributors' group using their email
-p.add_member_to_group(groups["Contributors"], "user@example.com")
-
-# 3. Remove a member from a group
-p.remove_member_from_group(groups["Contributors"], "user@example.com")
+content = get_azure_repo_file("Org", "Proj", "Repo", "/README.md", "pat", branch="main")
+if content:
+    print(content)
 ```
 
 ## Design Principles
-- **Library-First**: Modular and testable components.
-- **Environment-Driven**: No hardcoded secrets.
-- **Actionable Errors**: Clear feedback and solutions for API failures.
+- **Categorized Organization**: Functions are grouped by category (e.g., compute, storage) into separate implementation files.
+- **Robust Exception Handling**: Every function includes comprehensive try-except blocks that print detailed debug information on failure.
+- **Unified Entry Point**: The package's `__init__.py` automatically exposes all functions for a streamlined developer experience.
+- **Dedicated Testing**: Every function is verified by a corresponding test file located in the `test_fun/` directory.
+
+## Development Workflow
+1. **Define Category**: Identify or create a category for the new function.
+2. **Implementation**: Add the function to the corresponding `.py` file with full exception handling and debug logging.
+3. **Packaging**: Ensure the function is imported in `__init__.py`.
+4. **Testing**: Create a `function_name_test.py` in `test_fun/` to verify the logic.
