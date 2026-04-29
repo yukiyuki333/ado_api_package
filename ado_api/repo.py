@@ -1,6 +1,9 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
+from .project import get_project_id
+from typing import Optional
+
 def get_azure_repo_file(organization: str, project: str, repo: str, file_path: str, pat: str, branch: str = "main") -> str:
     """
     Retrieves the raw content of a file from an Azure DevOps repository.
@@ -236,3 +239,44 @@ def set_azure_repo_capacity(organization: str, project: str, repo: str, pat: str
     except Exception as e:
         print(f"Execution failed: {str(e)}")
         return False
+
+def create_ado_repo(org_name: str, project_name: str, repo_name: str, pat: str) -> Optional[dict]:
+    """
+    Creates a new Git repository in a specified Azure DevOps project.
+    
+    Args:
+        org_name (str): The name of the organization.
+        project_name (str): The name of the project.
+        repo_name (str): The name for the new repository.
+        pat (str): Personal Access Token for authentication.
+        
+    Returns:
+        Optional[dict]: The GitRepository object if successful, None otherwise.
+    """
+    try:
+        # 1. Retrieve project ID from name
+        project_id = get_project_id(org_name, project_name, pat)
+        if not project_id:
+            print(f"Execution failed: Could not retrieve ID for project '{project_name}'")
+            return None
+            
+        # 2. Create the repository
+        url = f"https://dev.azure.com/{org_name}/{project_id}/_apis/git/repositories?api-version=7.1"
+        payload = {"name": repo_name}
+        
+        response = requests.post(
+            url,
+            auth=HTTPBasicAuth('', pat),
+            json=payload
+        )
+        
+        if response.status_code in [200, 201]:
+            return response.json()
+        else:
+            print(f"Execution failed: Repository creation API returned status code {response.status_code}")
+            print(f"Response: {response.text}")
+            return None
+            
+    except Exception as e:
+        print(f"Execution failed: {str(e)}")
+        return None

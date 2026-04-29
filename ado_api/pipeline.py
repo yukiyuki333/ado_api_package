@@ -1,6 +1,72 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
+def get_repo_id_by_name(organization: str, project: str, repo_name: str, pat: str) -> str:
+    """
+    透過 Repo 名稱自動查詢並回傳 repo_id
+    """
+    auth = HTTPBasicAuth('', pat)
+    url = f"https://dev.azure.com/{organization}/{project}/_apis/git/repositories?api-version=7.1"
+    
+    try:
+        response = requests.get(url, auth=auth)
+        if response.status_code == 200:
+            repos = response.json().get('value', [])
+            for r in repos:
+                if r['name'] == repo_name:
+                    return r['id']
+            print(f"❌ 找不到名為 '{repo_name}' 的 Repo")
+        else:
+            print(f"❌ 無法取得 Repo 列表: {response.status_code}")
+    except Exception as e:
+        print(f"查詢 Repo ID 時發生錯誤: {str(e)}")
+    return None
+
+
+def create_azure_pipeline_auto(organization: str, project: str, repo_name: str, pipeline_name: str, yaml_path: str, pat: str) -> dict:
+    """
+    全自動版：給名稱就好，ID 我自己查，查完直接建立 Pipeline。
+    """
+    # 1. 懶人第一步：自己查 repo_id
+    repo_id = get_repo_id_by_name(organization, project, repo_name, pat)
+    if not repo_id:
+        return {} # 找不到就不用玩了
+
+    # 2. 準備建立 Pipeline 的 API
+    auth = HTTPBasicAuth('', pat)
+    url = f"https://dev.azure.com/{organization}/{project}/_apis/build/definitions?api-version=7.1"
+    
+    payload = {
+        "name": pipeline_name,
+        "type": "build",
+        "quality": "definition",
+        "process": {
+            "yamlFilename": yaml_path, # 例如: "/pipelines/main.yml"
+            "type": 2
+        },
+        "repository": {
+            "id": repo_id, # 這裡是剛才查到的 ID
+            "name": repo_name,
+            "type": "TfsGit"
+        },
+        "queue": {
+            "name": "Azure Pipelines"
+        }
+    }
+
+    try:
+        response = requests.post(url, auth=auth, json=payload)
+        if response.status_code in [200, 201]:
+            print(f"✅ 成功為 Repo '{repo_name}' 建立 Pipeline: {pipeline_name}")
+            return response.json()
+        else:
+            print(f"❌ 建立 Pipeline 失敗: {response.text}")
+            return {}
+    except Exception as e:
+        print(f"發生錯誤: {str(e)}")
+        return {}
+
+
 def run_azure_pipeline(organization: str, project: str, pipeline_name: str, pat: str, branch: str = "main") -> dict:
     """
     Triggers a run for an Azure DevOps pipeline based on its name and branch.
